@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using MatchmakerBotAPI.Core.Connectors.MatchmakerUsers;
 using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
+using System.Collections.Generic;
 
 namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
 {
@@ -8,7 +9,8 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
     {
         private IMatchmakerUsersConnector _matchmakerUsersConnector;
 
-        public MatchmakerUsersService(IMatchmakerUsersConnector matchmakerUsersConnector) {
+        public MatchmakerUsersService(IMatchmakerUsersConnector matchmakerUsersConnector)
+        {
             _matchmakerUsersConnector = matchmakerUsersConnector;
         }
 
@@ -38,6 +40,13 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
             var user = await _matchmakerUsersConnector.GetUserById(id);
 
             return user;
+        }
+
+        public async Task<List<MatchmakerUsersModel>> GetUsersByChannelId(string id)
+        {
+            var users = await _matchmakerUsersConnector.GetUsersByChannelId(id);
+
+            return users;
         }
     }
 }

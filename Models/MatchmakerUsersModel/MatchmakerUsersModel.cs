@@ -11,6 +11,6 @@ namespace MatchmakerBotAPI.Core.Models.MatchmakerUsersModel
         public string id { get; set; }
         public string name { get; set; }
 
-        public MatchmakerScore[] servers { get; set; }
+        public MatchmakerScoreModel[] servers { get; set; }
     }
 }

@@ -3,12 +3,13 @@ using System.Threading.Tasks;
 using System;
 using MatchmakerBotAPI.Core.Connectors.MongoDB;
 using MongoDB.Driver;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
 {
     public class MatchmakerUsersConnector : IMatchmakerUsersConnector
     {
-
         private IMongoCollection<MatchmakerUsersModel> _matchmakerUsersCollection;
 
         public MatchmakerUsersConnector(IMongoDBConnector mongoDBConnector)
@@ -19,7 +20,8 @@ namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
         {
             var findUser = await _matchmakerUsersCollection.FindAsync(x => x.id == user.id);
 
-            if(findUser.Any()) {
+            if (findUser.Any())
+            {
                 return 0;
             }
 
@@ -58,6 +60,15 @@ namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
             var foundUser = await _matchmakerUsersCollection.FindAsync(x => x.id == id);
 
             return foundUser.FirstOrDefault();
+        }
+
+        public async Task<List<MatchmakerUsersModel>> GetUsersByChannelId(string id)
+        {
+            var filter = Builders<MatchmakerUsersModel>.Filter.ElemMatch(x => x.servers, Builders<MatchmakerScoreModel>.Filter.Where(x => x.channelId == id));
+
+            var foundUser = await _matchmakerUsersCollection.FindAsync(filter);
+
+            return foundUser.ToList();
         }
     }
 }

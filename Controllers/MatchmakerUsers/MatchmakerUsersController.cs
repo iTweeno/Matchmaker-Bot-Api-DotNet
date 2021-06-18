@@ -6,7 +6,7 @@ using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
 
 namespace MatchmakerBotAPI.Core.Controllers
 {
-    [Route ("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class MatchmakerUsersController : ControllerBase
     {
@@ -16,6 +16,7 @@ namespace MatchmakerBotAPI.Core.Controllers
         {
             _matchmakerUsersService = matchmakerUsersService;
         }
+
         [HttpGet]
         [Route("[action]/{id}")]
         [ProducesResponseType(204)]
@@ -31,6 +32,23 @@ namespace MatchmakerBotAPI.Core.Controllers
 
             return Ok(user);
         }
+
+        [HttpGet]
+        [Route("[action]/{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(200)]
+        public async Task<IActionResult> GetUsersByChannelId([FromRoute] string id)
+        {
+            var users = await _matchmakerUsersService.GetUsersByChannelId(id);
+
+            if (users.Count == 0)
+            {
+                return NoContent();
+            }
+
+            return Ok(users);
+        }
+
         [HttpPost]
         [Route("[action]/")]
         [ProducesResponseType(403)]
@@ -51,6 +69,7 @@ namespace MatchmakerBotAPI.Core.Controllers
 
             return Created(nameof(AddUser), user);
         }
+
         [HttpPut]
         [Route("[action]/{id}")]
         [ProducesResponseType(200)]
@@ -64,25 +83,29 @@ namespace MatchmakerBotAPI.Core.Controllers
 
             var edited = await _matchmakerUsersService.EditUser(id, user);
 
-            if(!edited) {
+            if (!edited)
+            {
                 return StatusCode(304);
             }
 
             return Ok();
         }
+
         [HttpDelete]
         [Route("[action]/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(200)]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
-            if(id.Equals("")) {
+            if (id.Equals(""))
+            {
                 return BadRequest();
             }
 
             var deleted = await _matchmakerUsersService.DeleteUser(id);
 
-            if(!deleted) {
+            if (!deleted)
+            {
                 return NoContent();
             }
 

@@ -1,6 +1,6 @@
 namespace MatchmakerBotAPI.Core.Models.MatchmakerUsersModel
 {
-    public class MatchmakerScore
+    public class MatchmakerScoreModel
     {
         public string channelId { get; set; }
 
