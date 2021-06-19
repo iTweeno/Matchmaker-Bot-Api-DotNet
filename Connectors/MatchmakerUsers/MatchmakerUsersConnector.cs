@@ -5,6 +5,7 @@ using MatchmakerBotAPI.Core.Connectors.MongoDB;
 using MongoDB.Driver;
 using System.Linq;
 using System.Collections.Generic;
+using MatchmakerBotAPI.Core.Models.PageModel;
 
 namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
 {
@@ -62,13 +63,19 @@ namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
             return foundUser.FirstOrDefault();
         }
 
-        public async Task<List<MatchmakerUsersModel>> GetUsersByChannelId(string id)
+        public async Task<PageModel<MatchmakerUsersModel>> GetUsersByChannelId(string id, int page)
         {
             var filter = Builders<MatchmakerUsersModel>.Filter.ElemMatch(x => x.servers, Builders<MatchmakerScoreModel>.Filter.Where(x => x.channelId == id));
 
-            var foundUser = await _matchmakerUsersCollection.FindAsync(filter);
+            var foundUsers = _matchmakerUsersCollection.Find(filter);
 
-            return foundUser.ToList();
+            var total = Convert.ToInt32(await foundUsers.CountDocumentsAsync());
+
+            var items = await foundUsers.Skip(page * 20).Limit(20).ToListAsync();
+
+            PageModel<MatchmakerUsersModel> pageReturn = new PageModel<MatchmakerUsersModel>(total, items);
+
+            return pageReturn;
         }
     }
 }

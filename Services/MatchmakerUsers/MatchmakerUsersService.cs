@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using MatchmakerBotAPI.Core.Connectors.MatchmakerUsers;
 using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
 using System.Collections.Generic;
+using MatchmakerBotAPI.Core.Models.PageModel;
 
 namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
 {
@@ -42,9 +43,9 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
             return user;
         }
 
-        public async Task<List<MatchmakerUsersModel>> GetUsersByChannelId(string id)
+        public async Task<PageModel<MatchmakerUsersModel>> GetUsersByChannelId(string id, int page)
         {
-            var users = await _matchmakerUsersConnector.GetUsersByChannelId(id);
+            var users = await _matchmakerUsersConnector.GetUsersByChannelId(id, page);
 
             return users;
         }

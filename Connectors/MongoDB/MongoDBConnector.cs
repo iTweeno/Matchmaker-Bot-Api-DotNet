@@ -14,6 +14,7 @@ namespace MatchmakerBotAPI.Core.Connectors.MongoDB
         }
         public IMongoDatabase GetMatchmakerDatabase() {
             MongoClient client = new MongoClient("mongodb://localhost:27017");
+            
             IMongoDatabase database = client.GetDatabase("matchmaker");
 
             return database;

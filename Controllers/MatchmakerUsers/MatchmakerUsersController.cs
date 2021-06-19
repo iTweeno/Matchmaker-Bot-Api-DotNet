@@ -37,11 +37,11 @@ namespace MatchmakerBotAPI.Core.Controllers
         [Route("[action]/{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(200)]
-        public async Task<IActionResult> GetUsersByChannelId([FromRoute] string id)
+        public async Task<IActionResult> GetUsersByChannelId([FromRoute] string id, [FromQuery] int page)
         {
-            var users = await _matchmakerUsersService.GetUsersByChannelId(id);
+            var users = await _matchmakerUsersService.GetUsersByChannelId(id, page);
 
-            if (users.Count == 0)
+            if (users.total == 0)
             {
                 return NoContent();
             }

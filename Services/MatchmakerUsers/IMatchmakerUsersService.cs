@@ -1,4 +1,5 @@
 using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
+using MatchmakerBotAPI.Core.Models.PageModel;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
@@ -8,7 +9,7 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
 
         Task<MatchmakerUsersModel> GetUserById(string id);
 
-        Task<List<MatchmakerUsersModel>> GetUsersByChannelId(string id);
+        Task<PageModel<MatchmakerUsersModel>> GetUsersByChannelId(string id, int page);
 
         Task<bool> DeleteUser(string id);
 
