@@ -1,8 +1,9 @@
 using System;
+using MatchmakerBotAPI.Core.Models.Teams;
 
-namespace MatchmakerBotAPI.Core.Models.OngoingGamesModel
+namespace MatchmakerBotAPI.Core.Models.OngoingGames
 {
-    public class OngoingGames
+    public class OngoingGamesModel
     {
         public int queueSize { get; set; }
 
@@ -16,8 +17,8 @@ namespace MatchmakerBotAPI.Core.Models.OngoingGamesModel
 
         public VoiceChannels[] voiceChannelIds { get; set; }
 
-        public string team1 { get; set; } //change
+        public TeamsModel team1 { get; set; }
 
-        public string team2 { get; set; } //change 
+        public TeamsModel team2 { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MatchmakerBotAPI.Core.Services.MatchmakerUsers;
-using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
+using MatchmakerBotAPI.Core.Models.MatchmakerUsers;
 
 namespace MatchmakerBotAPI.Core.Controllers
 {
@@ -10,11 +10,33 @@ namespace MatchmakerBotAPI.Core.Controllers
     [ApiController]
     public class MatchmakerUsersController : ControllerBase
     {
-        private IMatchmakerUsersService _matchmakerUsersService;
+        private readonly IMatchmakerUsersService _matchmakerUsersService;
 
         public MatchmakerUsersController(IMatchmakerUsersService matchmakerUsersService)
         {
             _matchmakerUsersService = matchmakerUsersService;
+        }
+
+        [HttpPost]
+        [Route("[action]/")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(403)]
+        public async Task<IActionResult> AddUser([FromBody] MatchmakerUsersModel user)
+        {
+            if (!ModelState.IsValid || user.id == null || user.name == null || user.servers == null || user._id != null)
+            {
+                return BadRequest();
+            }
+
+            var inserted = await _matchmakerUsersService.AddUser(user);
+
+            if (!inserted)
+            {
+                return StatusCode(403);
+            }
+
+            return Created(nameof(AddUser), user);
         }
 
         [HttpGet]
@@ -49,34 +71,14 @@ namespace MatchmakerBotAPI.Core.Controllers
             return Ok(users);
         }
 
-        [HttpPost]
-        [Route("[action]/")]
-        [ProducesResponseType(403)]
-        [ProducesResponseType(201)]
-        public async Task<IActionResult> AddUser([FromBody] MatchmakerUsersModel user)
-        {
-            if (!ModelState.IsValid || user.id == null || user.name == null || user.servers == null)
-            {
-                return BadRequest();
-            }
-
-            var inserted = await _matchmakerUsersService.AddUser(user);
-
-            if (!inserted)
-            {
-                return StatusCode(403);
-            }
-
-            return Created(nameof(AddUser), user);
-        }
-
         [HttpPut]
         [Route("[action]/{id}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(304)]
+        [ProducesResponseType(400)]
         public async Task<IActionResult> EditUser([FromRoute] string id, [FromBody] MatchmakerUsersModel user)
         {
-            if (!ModelState.IsValid || user.id == null || user.name == null || user.servers == null)
+            if (!ModelState.IsValid || user.id == null || user.name == null || user.servers == null || user._id != null)
             {
                 return BadRequest();
             }
@@ -93,8 +95,8 @@ namespace MatchmakerBotAPI.Core.Controllers
 
         [HttpDelete]
         [Route("[action]/{id}")]
-        [ProducesResponseType(204)]
         [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
         public async Task<IActionResult> DeleteUser([FromRoute] string id)
         {
             if (id.Equals(""))

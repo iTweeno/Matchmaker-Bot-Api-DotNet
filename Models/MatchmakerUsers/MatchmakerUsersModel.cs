@@ -1,7 +1,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using System;
-namespace MatchmakerBotAPI.Core.Models.MatchmakerUsersModel
+namespace MatchmakerBotAPI.Core.Models.MatchmakerUsers
 {
     public class MatchmakerUsersModel
     {

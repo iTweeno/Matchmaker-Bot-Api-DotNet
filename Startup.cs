@@ -13,7 +13,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MatchmakerBotAPI.Core.Services.MatchmakerUsers;
 using MatchmakerBotAPI.Core.Connectors.MatchmakerUsers;
+using MatchmakerBotAPI.Core.Services.Guilds;
+using MatchmakerBotAPI.Core.Connectors.Guilds;
 using MatchmakerBotAPI.Core.Connectors.MongoDB;
+using MatchmakerBotAPI.Core.Services.Teams;
+using MatchmakerBotAPI.Core.Connectors.Teams;
 
 namespace MatchmakerBotAPI
 {
@@ -36,11 +40,15 @@ namespace MatchmakerBotAPI
             });
 
             //Services
+            services.AddScoped<IGuildsService, GuildsService>();
             services.AddScoped<IMatchmakerUsersService, MatchmakerUsersService>();
-            
+            services.AddScoped<ITeamsService, TeamsService>();
+
             //Connectors
             services.AddScoped<IMongoDBConnector, MongoDBConnector>();
             services.AddScoped<IMatchmakerUsersConnector, MatchmakerUsersConnector>();
+            services.AddScoped<IGuildsConnector, GuildsCollector>();
+            services.AddScoped<ITeamsConnector, TeamsConnector>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

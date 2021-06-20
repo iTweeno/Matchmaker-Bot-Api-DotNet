@@ -1,4 +1,4 @@
-namespace MatchmakerBotAPI.Core.Models.MatchmakerUsersModel
+namespace MatchmakerBotAPI.Core.Models.MatchmakerUsers
 {
     public class MatchmakerScoreModel
     {

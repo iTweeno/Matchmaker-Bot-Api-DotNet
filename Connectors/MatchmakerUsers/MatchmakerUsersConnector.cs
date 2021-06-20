@@ -1,4 +1,4 @@
-using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
+using MatchmakerBotAPI.Core.Models.MatchmakerUsers;
 using System.Threading.Tasks;
 using System;
 using MatchmakerBotAPI.Core.Connectors.MongoDB;
@@ -11,7 +11,7 @@ namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
 {
     public class MatchmakerUsersConnector : IMatchmakerUsersConnector
     {
-        private IMongoCollection<MatchmakerUsersModel> _matchmakerUsersCollection;
+        private readonly IMongoCollection<MatchmakerUsersModel> _matchmakerUsersCollection;
 
         public MatchmakerUsersConnector(IMongoDBConnector mongoDBConnector)
         {
@@ -37,25 +37,6 @@ namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
             }
         }
 
-        public async Task<int> DeleteUser(string id)
-        {
-            var deleted = await _matchmakerUsersCollection.DeleteOneAsync(x => x.id == id);
-
-            return Convert.ToInt32(deleted.DeletedCount);
-        }
-
-        public async Task<int> EditUser(string id, MatchmakerUsersModel user)
-        {
-            var update = Builders<MatchmakerUsersModel>.Update
-            .Set(x => x.id, user.id)
-            .Set(x => x.name, user.name)
-            .Set(x => x.servers, user.servers);
-
-            var edited = await _matchmakerUsersCollection.UpdateOneAsync<MatchmakerUsersModel>(x => x.id == id, update);
-
-            return Convert.ToInt32(edited.ModifiedCount);
-        }
-
         public async Task<MatchmakerUsersModel> GetUserById(string id)
         {
             var foundUser = await _matchmakerUsersCollection.FindAsync(x => x.id == id);
@@ -76,6 +57,25 @@ namespace MatchmakerBotAPI.Core.Connectors.MatchmakerUsers
             PageModel<MatchmakerUsersModel> pageReturn = new PageModel<MatchmakerUsersModel>(total, items);
 
             return pageReturn;
+        }
+
+        public async Task<int> EditUser(string id, MatchmakerUsersModel user)
+        {
+            var update = Builders<MatchmakerUsersModel>.Update
+            .Set(x => x.id, user.id)
+            .Set(x => x.name, user.name)
+            .Set(x => x.servers, user.servers);
+
+            var edited = await _matchmakerUsersCollection.UpdateOneAsync<MatchmakerUsersModel>(x => x.id == id, update);
+
+            return Convert.ToInt32(edited.ModifiedCount);
+        }
+
+        public async Task<int> DeleteUser(string id)
+        {
+            var deleted = await _matchmakerUsersCollection.DeleteOneAsync(x => x.id == id);
+
+            return Convert.ToInt32(deleted.DeletedCount);
         }
     }
 }

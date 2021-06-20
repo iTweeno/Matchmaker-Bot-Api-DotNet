@@ -1,4 +1,4 @@
-namespace MatchmakerBotAPI.Core.Models.OngoingGamesModel
+namespace MatchmakerBotAPI.Core.Models.OngoingGames
 {
     public class VoiceChannels
     {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using MatchmakerBotAPI.Core.Connectors.MatchmakerUsers;
-using MatchmakerBotAPI.Core.Models.MatchmakerUsersModel;
+using MatchmakerBotAPI.Core.Models.MatchmakerUsers;
 using System.Collections.Generic;
 using MatchmakerBotAPI.Core.Models.PageModel;
 
@@ -8,7 +8,7 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
 {
     public class MatchmakerUsersService : IMatchmakerUsersService
     {
-        private IMatchmakerUsersConnector _matchmakerUsersConnector;
+        private readonly IMatchmakerUsersConnector _matchmakerUsersConnector;
 
         public MatchmakerUsersService(IMatchmakerUsersConnector matchmakerUsersConnector)
         {
@@ -20,20 +20,6 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
             var inserted = await _matchmakerUsersConnector.AddUser(user);
 
             return inserted != 0;
-        }
-
-        public async Task<bool> DeleteUser(string id)
-        {
-            var deleted = await _matchmakerUsersConnector.DeleteUser(id);
-
-            return deleted != 0;
-        }
-
-        public async Task<bool> EditUser(string id, MatchmakerUsersModel user)
-        {
-            var edited = await _matchmakerUsersConnector.EditUser(id, user);
-
-            return edited != 0;
         }
 
         public async Task<MatchmakerUsersModel> GetUserById(string id)
@@ -48,6 +34,19 @@ namespace MatchmakerBotAPI.Core.Services.MatchmakerUsers
             var users = await _matchmakerUsersConnector.GetUsersByChannelId(id, page);
 
             return users;
+        }
+        public async Task<bool> EditUser(string id, MatchmakerUsersModel user)
+        {
+            var edited = await _matchmakerUsersConnector.EditUser(id, user);
+
+            return edited != 0;
+        }
+
+        public async Task<bool> DeleteUser(string id)
+        {
+            var deleted = await _matchmakerUsersConnector.DeleteUser(id);
+
+            return deleted != 0;
         }
     }
 }
